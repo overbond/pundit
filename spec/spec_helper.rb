@@ -195,3 +195,16 @@ module ProjectOneTwoThree
 
   class AvatarFourFiveSixPolicy < Struct.new(:user, :avatar); end
 end
+
+class CustomParamKeyPolicy < Struct.new(:user, :key)
+  def param_key
+    :custom
+  end
+
+  def permitted_attributes
+    [:votes]
+  end
+end
+
+class CustomParamKey
+end

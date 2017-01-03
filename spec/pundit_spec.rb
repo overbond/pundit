@@ -3,6 +3,7 @@ require "spec_helper"
 describe Pundit do
   let(:user) { double }
   let(:post) { Post.new(user) }
+  let(:key) { CustomParamKey.new }
   let(:customer_post) { Customer::Post.new(user) }
   let(:post_four_five_six) { PostFourFiveSix.new(user) }
   let(:comment) { Comment.new }
@@ -444,6 +445,14 @@ describe Pundit do
 
       expect(Controller.new(user, params).permitted_attributes(customer_post)).to eq("title" => "Hello", "votes" => 5)
       expect(Controller.new(double, params).permitted_attributes(customer_post)).to eq("votes" => 5)
+    end
+
+    it "uses custom param key when policy implements param_key method" do
+      params = ActionController::Parameters.new(action: "update", custom: {
+        votes: 5
+      })
+
+      expect(Controller.new(user, params).permitted_attributes(key)).to eq("votes" => 5)
     end
   end
 

@@ -236,8 +236,8 @@ protected
   #   If omitted then this defaults to the Rails controller action name.
   # @return [Hash{String => Object}] the permitted attributes
   def permitted_attributes(record, action = params[:action])
-    param_key = PolicyFinder.new(record).param_key
     policy = policy(record)
+    param_key = policy.respond_to?(:param_key) ? policy.param_key : PolicyFinder.new(record).param_key
     method_name = if policy.respond_to?("permitted_attributes_for_#{action}")
       "permitted_attributes_for_#{action}"
     else
